@@ -1,3 +1,5 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -5,33 +7,35 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-
-public class RosettaStone {
+public class RosettaStone implements ActionListener {
 	HashMap<String,String> translator;
-	JFrame jframe;
-	JButton jbutton1;
-	JButton jbutton2;
-	JPanel jpanel;
+	JFrame frame;
+	JButton button1;
+	JButton button2;
+	JPanel panel;
 	public static void main(String[] args) {
 		new RosettaStone().go();
 	}
 
 	private void go() {
 		createDictionary();
-		createUI();
-		
+		createUI();	
 	}
 
 	private void createUI() {
-		jframe = new JFrame();
-		jpanel = new JPanel();
-		jbutton1 = new JButton();
-		jbutton2 = new JButton();
-		jpanel.add(jbutton1);
-		jpanel.add(jbutton2);
-		jframe.add(jpanel);
-		jframe.setVisible(true);
-		jframe.pack();
+		frame = new JFrame();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		panel = new JPanel();
+		button1 = new JButton();
+		button2 = new JButton();
+		panel.add(button1);
+		panel.add(button2);
+		button1.addActionListener(this);
+		button1.setText(getRandomKey(translator));
+		button2.setText("");
+		frame.add(panel);
+		frame.setVisible(true);
+		frame.pack();
 		
 	}
 
@@ -41,10 +45,30 @@ public class RosettaStone {
 		translator.put("Ola", "Hello");
 		translator.put("Uno", "One");
 		translator.put("Bien", "Good");
+		translator.put("Contento", "Happy");
+		translator.put("teléfono", "phone");
+		translator.put("caimán", "alligator");
+		translator.put("computadora", "computer");
+		translator.put("helado", "icecream");
+		translator.put("coche", "car");
+		translator.put("flor", "flower");
 	}
 	String getRandomKey(HashMap<String, String> map) {
         String[] keysAsArray = map.keySet().toArray(new String[0]);
         int randomness = new Random().nextInt(map.size());
         return keysAsArray[randomness];
     }
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(button2.getText()==""){
+			button2.setText(translator.get(button1.getText()));
+			frame.pack();
+		}
+		else{
+			button2.setText("");
+			button1.setText(getRandomKey(translator));
+			frame.pack();			
+		}
+	}
 }
